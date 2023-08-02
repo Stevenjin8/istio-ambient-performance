@@ -5,7 +5,7 @@ export YAML_PATH=./yaml/deploy.yaml
 export BENCHMARK_SERVER=server
 export BENCHMARK_CLIENT=client
 
-# where to store primary and intermediary results
+# where to store primary and intermediate results
 export RESULTS=results
 
 # name of the namespaces for each mesh setup
@@ -31,6 +31,7 @@ export TEST_ARGS="-P ,35000 -k all"
 
 # -P toggles the tests banner.
 #    This is very confusing because it has nothing to do with ports.
+# -j to measure latency
 export GLOBAL_ARGS="-P 0 -j"
 
 

@@ -20,7 +20,7 @@ function run-tests() {
     for _ in $(seq "$N_RUNS")
     do
         kubectl exec "deploy/$BENCHMARK_CLIENT" -n "$client_ns" \
-        -- netperf -H $GLOBAL_ARGS -H "$BENCHMARK_SERVER.$server_ns" -t TCP_STREAM \
+        -- netperf $GLOBAL_ARGS -H "$BENCHMARK_SERVER.$server_ns" -t TCP_STREAM \
         -- $TEST_ARGS
         echo "NAMESPACES=$client_ns:$server_ns"
         echo "$TEST_RUN_SEPARATOR"
@@ -55,11 +55,7 @@ true > "$RESULTS/TCP_RR"
 
 # NO MESH
 
-run-tests "$NS_NO_MESH" "$NS_NO_MESH" "$RR_ARGS"
 run-tests "$NS_AMBIENT" "$NS_AMBIENT" "$RR_ARGS"
+run-tests "$NS_NO_MESH" "$NS_NO_MESH" "$RR_ARGS"
 run-tests "$NS_ISTIO"   "$NS_ISTIO"   "$RR_ARGS"
-run-tests "$NS_AMBIENT" "$NS_ISTIO"   "$RR_ARGS"
-run-tests "$NS_ISTIO"   "$NS_AMBIENT" "$RR_ARGS"
-run-tests "$NS_AMBIENT" "$NS_NO_MESH" "$RR_ARGS"
-run-tests "$NS_NO_MESH" "$NS_AMBIENT" "$RR_ARGS"
 

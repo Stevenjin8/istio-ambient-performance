@@ -12,7 +12,8 @@ kubectl create namespace $NS_AMBIENT || true
 
 # install both ambient and normal Istio
 # they should be both work on the same mesh
-istioctl install --set profile=ambient -y
+# assume istio is already installed so I can use custom images
+# istioctl install --set profile=ambient -y
 
 # inject Envoy sidecars into pods
 kubectl label namespace "$NS_ISTIO" istio-injection=enabled

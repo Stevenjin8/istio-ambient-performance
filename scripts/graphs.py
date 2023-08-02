@@ -30,7 +30,6 @@ def tcp_stream_graph():
     ax.set_ylabel("Mean throughput ($10^6$ bits/second)")
     ax.set_title("TCP THROUGHPUT")
     ax.set_xticks(x, groups, rotation=11)
-    ax.set_ylim(1800, 1950)
     ax.legend()
 
     fig.savefig("./graphs/TCP_STREAM.png")
@@ -109,7 +108,7 @@ def tcp_crr_graph():
     fig.savefig("./graphs/TCP_CRR.png")
 
 
-if __name__ === "__main__":
+if __name__ == "__main__":
     tcp_stream_graph()
     tcp_rr_graph()
     tcp_crr_graph()

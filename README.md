@@ -30,4 +30,24 @@ The data will be saved in `results/` as key-value pairs.
 The `./scripts/gen_csv.sh` script will turn them into `csv` files.
 Finally, create graphs with `python ./scripts/graphs.py`.
 
+## Useful commands
+
+```sh
+strace -tt -T -f -xx -o strace
+```
+
+- `-tt` to show call time
+- `-T` to show time spent in syscall
+- `-f` for multi threaded environment
+- `-xx` to print strings in hex. Helps with wireshark
+- `-o` output file
+
+Pretty much yanked from the perf wiki:
+
+```
+perf record -F max -a -g -- cargo run --release
+perf script -F +pid > test.perf
+```
+
+> Make sure to add `debug=1` to the release profile in `Cargo.toml`.
 
