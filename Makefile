@@ -17,3 +17,16 @@ pods:
 default-ns:
 	$K config set-context --current --namespace=$(NS)
 
+.PHONY: pres pres-1.18 pres-master pres-fast
+
+pres: pres-118 pres-master pres-fast
+
+pres-118:
+	RESULTS=./pres-data/1.18/results OUT_DIR=./pres-data/1.18/graphs python ./scripts/graphs.py
+
+pres-master:
+	RESULTS=./pres-data/master-old/results OUT_DIR=./pres-data/master-old/graphs python ./scripts/graphs.py
+
+pres-fast:
+	RESULTS=./pres-data/fast/results OUT_DIR=./pres-data/fast/graphs python ./scripts/graphs.py
+

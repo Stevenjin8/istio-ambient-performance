@@ -1,14 +1,53 @@
 import os
-import dotenv
+from enum import Enum
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
+GREY = (80 / 255, 80 / 255, 80 / 255)
+LIGHT_GREY = (230 / 255, 230 / 255, 230 / 255)
+
+plt.rcParams["font.family"] = "sans-serif"
+plt.rcParams["axes.unicode_minus"] = False
+plt.rcParams["font.sans-serif"] = ["Segoe UI", "Helvetica"]
+plt.rcParams['text.color'] = GREY
+plt.rcParams['text.color'] = GREY
+plt.rcParams['axes.labelcolor'] = GREY
+plt.rcParams['xtick.color'] = GREY
+plt.rcParams['ytick.color'] = GREY
+
+BAR_WIDTH = 0.4
 # load data
 # TCP_STREAM figure
-dotenv.load_dotenv("./scripts/config.sh")
 RESULTS = os.environ["RESULTS"]
+OUT_DIR = os.environ["OUT_DIR"]
 
+BLUE = (0 / 255, 120 / 255, 212 / 255)
+LIGHT_BLUE = (80 / 255, 230 / 255, 255 / 255)
+ORANGE = (255 / 255, 185 / 255, 0 / 255)
+LIGHT_ORANGE = (254 / 255, 240 / 255, 0 / 255)
+
+# Assume that ambient comes first
+BAR_COLORS = (ORANGE, BLUE, BLUE)
+BAR_COLORS_LIGHT = (LIGHT_ORANGE, LIGHT_BLUE, LIGHT_BLUE)
+
+def create_fig():
+    # rely on this ordering. This is bad.
+    groups = ["Ambient", "Sidecar", "No Mesh"]
+    x = list(range(len(groups)))
+
+    fig, ax = plt.subplots(figsize=(8,4))
+    ax.spines["top"].set_visible(False)
+    ax.spines["right"].set_visible(False)
+    ax.spines["left"].set_visible(False)
+    ax.spines["bottom"].set_visible(False)
+    ax.tick_params(axis="both", which="both", length=0)
+    ax.yaxis.grid(True, which='major', color=LIGHT_GREY)
+    ax.set_axisbelow(True)
+    ax.set_xlim(-0.5, 2.5)
+    ax.set_xticks(x, groups)
+    # ax.set_xlabel("Mesh")
+    return fig, ax
 
 def tcp_stream_graph():
     stream_df = pd.read_csv(
@@ -16,24 +55,24 @@ def tcp_stream_graph():
     )
     gb = stream_df.groupby("NAMESPACES")
     groups = sorted(list(gb.groups.keys()))  # list for consistent ordering
+    groups_pretty = [g[: g.find(":")] for g in groups]
     fig: plt.Figure
     ax: plt.Axes
-    fig, ax = plt.subplots()  
+    fig, ax = plt.subplots()
 
     height = [gb["THROUGHPUT"].mean()[g] for g in groups]
     yerr = [gb["THROUGHPUT"].std()[g] * 2 for g in groups]
     x = list(range(len(groups)))
 
     ax.errorbar(x=x, y=height, yerr=yerr, fmt="|", color="r", label=r"2 $\cdot$ stddev")
-    ax.bar(x=x, height=height)
+    ax.bar(x=x, height=height, width=BAR_WIDTH)
 
     ax.set_ylabel("Mean throughput ($10^6$ bits/second)")
     ax.set_title("TCP THROUGHPUT")
-    ax.set_xticks(x, groups, rotation=11)
-    ax.set_ylim(1800, 1950)
+    ax.set_xticks(x, groups_pretty)
     ax.legend()
 
-    fig.savefig("./graphs/TCP_STREAM.png")
+    fig.savefig(f"./{OUT_DIR}/TCP_STREAM.svg")
 
 
 def tcp_rr_graph():
@@ -51,26 +90,26 @@ def tcp_rr_graph():
     gb = stream_df.groupby("NAMESPACES")
     groups = list(gb.groups.keys())  # list for consistent ordering
     groups.sort()
+    groups_pretty = [g[: g.find(":")] for g in groups]
     fig: plt.Figure
     ax: plt.Axes
-    fig, ax = plt.subplots()  
+    fig, ax = plt.subplots()
 
-    height50 = [gb["P50_LATENCY"].median()[g] for g in groups]
-    height90 = [gb["P90_LATENCY"].median()[g] for g in groups]
-    height99 = [gb["P99_LATENCY"].median()[g] for g in groups]
+    height50 = [gb["P50_LATENCY"].median()[g] / 1000 for g in groups]
+    height90 = [gb["P90_LATENCY"].median()[g] / 1000 for g in groups]
+    height99 = [gb["P99_LATENCY"].median()[g] / 1000 for g in groups]
     x = list(range(len(groups)))
 
-    ax.bar(x=x, height=height99, label="P99")
-    ax.bar(x=x, height=height90, label="P90")
-    ax.bar(x=x, height=height50, label="P50")   
+    ax.bar(x=x, height=height90, label="P90", color=BAR_COLORS_LIGHT, width=BAR_WIDTH)
+    ax.bar(x=x, height=height50, label="P50", color=BAR_COLORS, width=BAR_WIDTH)
 
     ax.set_title("TCP REQUEST RESPONSE")
-    ax.set_xlabel("src:dst")
-    ax.set_ylabel("Transaction speed (usec/transaction)")
-    ax.legend()
-    ax.set_xticks(x, groups, rotation=11)
+    ax.set_xlabel("Mesh")
+    ax.set_ylabel(r"Transaction speed (msec/transaction)")
+    ax.legend
+    ax.set_xticks(x, groups_pretty)
 
-    fig.savefig("./graphs/TCP_RR.png")
+    fig.savefig(f"./{OUT_DIR}/TCP_RR.svg")
 
 
 def tcp_crr_graph():
@@ -89,27 +128,24 @@ def tcp_crr_graph():
     groups.sort()
     fig: plt.Figure
     ax: plt.Axes
-    fig, ax = plt.subplots()  
+    fig, ax = create_fig()
 
-    height50 = [gb["P50_LATENCY"].median()[g] for g in groups]
-    height90 = [gb["P90_LATENCY"].median()[g] for g in groups]
-    height99 = [gb["P99_LATENCY"].median()[g] for g in groups]
+    height50 = [gb["P50_LATENCY"].median()[g] / 1000 for g in groups]
+    height90 = [gb["P90_LATENCY"].median()[g] / 1000 for g in groups]
+    height99 = [gb["P99_LATENCY"].median()[g] / 1000 for g in groups]
     x = list(range(len(groups)))
 
-    ax.bar(x=x, height=height99, label="P99")
-    ax.bar(x=x, height=height90, label="P90")
-    ax.bar(x=x, height=height50, label="P50")
+    ax.bar(x=x, height=height90, label="P90", color=BAR_COLORS_LIGHT, width=BAR_WIDTH)
+    ax.bar(x=x, height=height50, label="P50", color=BAR_COLORS, width=BAR_WIDTH)
 
     ax.set_title("TCP CONNECT REQUEST RESPONSE")
-    ax.set_xlabel("(src:dst)")
-    ax.set_ylabel("Transaction speed (usec/transaction)")
+    ax.set_ylabel("Transaction speed (msec/transaction)")
     ax.legend()
-    ax.set_xticks(x, groups, rotation=11)
 
-    fig.savefig("./graphs/TCP_CRR.png")
+    fig.savefig(f"./{OUT_DIR}/TCP_CRR.svg")
 
 
-if __name__ === "__main__":
+if __name__ == "__main__":
     tcp_stream_graph()
     tcp_rr_graph()
     tcp_crr_graph()
