@@ -23,10 +23,13 @@ pres: pres-118 pres-master pres-fast
 
 pres-118:
 	RESULTS=./pres-data/1.18/results OUT_DIR=./pres-data/1.18/graphs python ./scripts/graphs.py
+	sed -i "s/\(.*\)font:\(.*\)Ambient\(.*\)/\1font: bold\2Ambient\3/" pres-data/1.18/graphs/*.svg
 
 pres-master:
 	RESULTS=./pres-data/master-old/results OUT_DIR=./pres-data/master-old/graphs python ./scripts/graphs.py
+	sed -i "s/\(.*\)font:\(.*\)Ambient\(.*\)/\1font: bold\2Ambient\3/" pres-data/master-old/graphs/*.svg
 
 pres-fast:
 	RESULTS=./pres-data/fast/results OUT_DIR=./pres-data/fast/graphs python ./scripts/graphs.py
+	sed -i "s/\(.*\)font:\(.*\)Ambient\(.*\)/\1font: bold\2Ambient\3/" pres-data/fast/graphs/*.svg
 
