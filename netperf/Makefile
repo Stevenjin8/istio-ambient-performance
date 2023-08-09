@@ -17,7 +17,7 @@ push-cr:
 push-local:
 	kind load docker-image $(CR_NAME)
 
-push: push-cr push-local
+push: push-cr
 
 run:
 	docker run --rm --name $(NAME) $(NAME) -P

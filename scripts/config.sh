@@ -10,13 +10,13 @@ export RESULTS=results
 
 # name of the namespaces for each mesh setup
 export NS_NO_MESH=no-mesh
-export NS_ISTIO=istio
+export NS_SIDECAR=sidecar
 export NS_AMBIENT=ambient
 
-# Separator for tests runs
-export TEST_RUN_SEPARATOR="---"
+# Separator for tests runs. Doesn't really matter. Just set to something weird
+export TEST_RUN_SEPARATOR="~~~~~~~~~~~~~~~~"
 # How many runs of each test
-export N_RUNS=5
+export N_RUNS=2
 
 # Extra arguments for TCP_RR and TCP_CRR tests.
 # These are necessary because by default *RR tests send only one byte.
@@ -34,4 +34,5 @@ export TEST_ARGS="-P ,35000 -k all"
 # -j to measure latency
 export GLOBAL_ARGS="-P 0 -j"
 
-
+# where to output the graphs
+export GRAPHS="graphs"

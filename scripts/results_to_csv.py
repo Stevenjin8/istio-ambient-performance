@@ -1,12 +1,14 @@
+# Usage will likely be `python results_to_csv.py ---`
 import csv
 from typing import Set, List, Dict
 import sys
 
-TEST_RUN_SEPARATOR="---"
+TEST_RUN_SEPARATOR=sys.argv[1]
 
 fieldnames: Set[str] = set()
 rows: List[Dict[str,str]] = []
 row: Dict[str, str] = dict()
+
 for line in sys.stdin:
     line = line.strip()
     if line.strip() == TEST_RUN_SEPARATOR:

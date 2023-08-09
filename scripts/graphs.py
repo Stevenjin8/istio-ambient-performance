@@ -8,6 +8,7 @@ import pandas as pd
 # TCP_STREAM figure
 dotenv.load_dotenv("./scripts/config.sh")
 RESULTS = os.environ["RESULTS"]
+GRAPHS = os.environ["GRAPHS"]
 
 
 def tcp_stream_graph():
@@ -32,7 +33,7 @@ def tcp_stream_graph():
     ax.set_xticks(x, groups, rotation=11)
     ax.legend()
 
-    fig.savefig("./graphs/TCP_STREAM.png")
+    fig.savefig(f"./{GRAPHS}/TCP_STREAM.png")
 
 
 def tcp_rr_graph():
@@ -69,7 +70,7 @@ def tcp_rr_graph():
     ax.legend()
     ax.set_xticks(x, groups, rotation=11)
 
-    fig.savefig("./graphs/TCP_RR.png")
+    fig.savefig(f"./{GRAPHS}/TCP_RR.png")
 
 
 def tcp_crr_graph():
@@ -105,10 +106,11 @@ def tcp_crr_graph():
     ax.legend()
     ax.set_xticks(x, groups, rotation=11)
 
-    fig.savefig("./graphs/TCP_CRR.png")
+    fig.savefig(f"./{GRAPHS}/TCP_CRR.png")
 
 
 if __name__ == "__main__":
+    os.mkdir(GRAPHS)
     tcp_stream_graph()
     tcp_rr_graph()
     tcp_crr_graph()
