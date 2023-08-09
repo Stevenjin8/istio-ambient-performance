@@ -1,5 +1,4 @@
 import os
-from enum import Enum
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -9,7 +8,7 @@ LIGHT_GREY = (217 / 255, 217 / 255, 217 / 255)
 
 plt.rcParams["font.family"] = "sans-serif"
 plt.rcParams["axes.unicode_minus"] = False
-plt.rcParams["font.sans-serif"] = ["Segoe UI", "Helvetica"]
+plt.rcParams["font.sans-serif"] = ["Segoe UI", "Trebuchet MS"]
 plt.rcParams["text.color"] = GREY
 plt.rcParams["text.color"] = GREY
 plt.rcParams["axes.labelcolor"] = GREY
