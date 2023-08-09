@@ -110,7 +110,7 @@ def tcp_crr_graph():
 
 
 if __name__ == "__main__":
-    os.mkdirs(GRAPHS, exists_ok=True)
+    os.makedirs(GRAPHS, exist_ok=True)
     tcp_stream_graph()
     tcp_rr_graph()
     tcp_crr_graph()

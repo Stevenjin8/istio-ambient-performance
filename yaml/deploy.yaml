@@ -41,8 +41,6 @@ spec:
         role: server
       containers:
       - name: server
-        securityContext:  # WARNING WARNING WARNING
-          privileged: true
         image: stjinxuan.azurecr.io/netperf
         imagePullPolicy: Always
         command: ["./server-and-sleep.sh"]
@@ -74,8 +72,6 @@ spec:
         role: client
       containers:
       - name: client
-        securityContext:  # WARNING WARNING WARNING
-          privileged: true
         image: stjinxuan.azurecr.io/netperf
         imagePullPolicy: Always
         command: ["/bin/sleep", "365d"]
