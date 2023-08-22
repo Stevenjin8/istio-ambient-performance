@@ -7,11 +7,16 @@ export BENCHMARK_CLIENT=client
 
 # where to store primary and intermediate results
 export RESULTS=results
+export FORTIO_RESULTS=results/fortio
 
 # name of the namespaces for each mesh setup
 export NS_NO_MESH=no-mesh
 export NS_SIDECAR=sidecar
 export NS_AMBIENT=ambient
+export NS_WAYPOINT=waypoint  # ambient w/ waypoint proxy
+# name of service account for server. Used for waypoint configuration.
+# This is also hardcoded in deployment configuration
+export SA_SERVER=server-sa
 
 # Separator for tests runs. Doesn't really matter. Just set to something weird
 export TEST_RUN_SEPARATOR="~~~~~~~~~~~~~~~~"
@@ -28,6 +33,18 @@ export RR_ARGS="-r 100"
 # -k Output all fields in key=value from.
 #    We will pick and choose later.
 export TEST_ARGS="-P ,35000 -k all"
+
+# Args for serial tests
+# -qps          As many queries per second as possible
+# -c            Number of sending threads
+# -payload-file POST request with Makefile as data.
+# 
+# This configuration seems to trigger the Nagle's + delayed ack interaction.
+export FORTIO_SERIAL_HTTP_ARGS="-qps -1 -c 1 -payload-size 300"
+
+# Arguments for prallel http tests
+# 3 sending threads should be enough(?)
+export FORTIO_PARALLEL_HTTP_ARGS="-qps -1 -c 3"
 
 # -P toggles the tests banner.
 #    This is very confusing because it has nothing to do with ports.

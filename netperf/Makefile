@@ -20,4 +20,4 @@ push-local:
 push: push-cr
 
 run:
-	docker run --rm --name $(NAME) $(NAME) -P
+	docker run --rm --name $(NAME) $(NAME) -p 8080:8080

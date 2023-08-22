@@ -5,8 +5,7 @@ set -eux
 netserver $@
 echo "Started echo server."
 ncat -e /bin/cat -k -l 6789 &
-echo "Started netserver."
-python ./tcp_ping/server.py &
 echo "Started TCP ping server"
-echo "Sleeping"
+fortio server &
+python3 -m http.server &
 sleep 365d

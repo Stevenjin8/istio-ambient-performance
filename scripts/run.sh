@@ -1,5 +1,5 @@
 #! /bin/bash
-# Run performance benchmarks
+# Run netperf performance benchmarks
 
 set -eux
 
@@ -54,6 +54,7 @@ true > "$RESULTS/TCP_RR"
 run-tests "$NS_AMBIENT" "$NS_AMBIENT" 
 run-tests "$NS_NO_MESH" "$NS_NO_MESH" 
 run-tests "$NS_SIDECAR" "$NS_SIDECAR"   
+run-tests "$NS_WAYPOINT" "$NS_WAYPOINT"   
 # For cross-mesh tests
 # run-tests "$NS_SIDECAR" "$NS_AMBIENT"   
 
